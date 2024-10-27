@@ -26,6 +26,8 @@
       class="midXl:row-span-4 midXl:sticky midXl:top-container midXl:self-start"
     />
 
+    <UserTasks />
+
     <UserProgress />
 
     <UserCourses />
