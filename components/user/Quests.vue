@@ -1,16 +1,6 @@
 <template>
   <section>
     <SectionTitle sub :heading="header.heading" :body="header.body" class="!m-0" />
-    <article
-      class="flex items-center p-2 bg-warning-light text-warning rounded-md md:rounded-lg"
-    >
-      <p>+ 5</p>
-      <img
-        src="/images/coin.png"
-        :alt="t('AltAttributes.Morphcoin')"
-        class="w-8 h-8 object-contain"
-      />
-    </article>
     <p v-if="lecturesDone < 5">
       {{ t("Body.SolveFiveQuests") }}
     </p>
@@ -26,8 +16,18 @@
         :style="{ width: `${progressbar_progress}%` }"
       />
     </div>
-
     <p v-if="lecturesDone === 5">{{ t("Body.SeeYouTomorrow") }}</p>
+    <article
+      style="width: fit-content; position: relative; left: 90%; top: -80%"
+      class="flex items-center p-2 bg-warning-light text-warning rounded-md md:rounded-lg"
+    >
+      <p>+ 5</p>
+      <img
+        src="/images/coin.png"
+        :alt="t('AltAttributes.Morphcoin')"
+        class="w-8 h-8 object-contain"
+      />
+    </article>
   </section>
 </template>
 
@@ -43,7 +43,7 @@ export default defineComponent({
       body: "",
     });
 
-    var lecturesDone = 4;
+    var lecturesDone = 0;
     var progressbar_progress = 0;
 
     if (lecturesDone === 0) {
