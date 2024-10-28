@@ -5,9 +5,9 @@
 ❌ Animation
 ✅ middleware
 
-✅ Tested on chrome
-✅ Tested on firefox
-✅ Tested on safari
+❌ Tested on chrome
+❌ Tested on firefox
+❌ Tested on safari
 ❌ Tested on android mobile
 ❌ Tested on apple mobile
 
@@ -26,7 +26,7 @@
       class="midXl:row-span-4 midXl:sticky midXl:top-container midXl:self-start"
     />
 
-    <UserTasks />
+    <Userquests />
 
     <UserProgress />
 
