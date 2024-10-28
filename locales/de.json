@@ -225,6 +225,7 @@
     "VerifyAccount": "Konto verifizieren",
     "EditProfile": "Profil bearbeiten",
     "SkillPoints": "Skillpunkte",
+    "DailyQuests":"Tägliche Quests",
     "Nodes": "Knoten",
     "WatchedCourses": "Gesehene Kurse",
     "MyJobsOffers": "Meine Jobangebote",
@@ -510,7 +511,10 @@
     "IncreasedSecurity": "Erhöhte Sicherheit",
     "NoMoreIncreaseSecurity": "Keine erhöhte Sicherheit mehr",
     "ExcitingUpdates": "spannende Neuigkeiten und Updates",
-    "NoMoreExcitingUpdates": "keine spannende Neuigkeiten und Updates mehr"
+    "NoMoreExcitingUpdates": "keine spannende Neuigkeiten und Updates mehr",
+    "SolvedFiveQuests": "Herzlichen Glückwunsch! Du hast 5 Quests gemacht und dafür 5 MC bekommen.",
+    "SolveFiveQuests": "Löse 5 Quests um 5 MC zu bekommen.",
+    "SeeYouTomorrow": "Bis Morgen!"
   },
   "AltAttributes": {
     "BootstrapAcademyLogo": "Bootstrap Academy Logo",
