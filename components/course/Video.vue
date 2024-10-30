@@ -11,6 +11,7 @@
     ></iframe>
 
     <video
+      ref="video"
       v-else-if="activeLecture.type == 'mp4'"
       :poster="course.image"
       controls
@@ -54,6 +55,7 @@ export default defineComponent({
     const videoSRC = useVideoSRC();
 
     let videoInterval: any;
+    const video = ref<HTMLVideoElement | null>(null); 
     const refSource = ref<HTMLSourceElement | any>(null);
 
     watch(
@@ -73,9 +75,15 @@ export default defineComponent({
           refSource.value.setAttribute("src", videoSRC.value);
           videoInterval = setInterval(async () => {
             await getLectureVideoSRC(courseID, newValue);
+            if (video.value) {
+              video.value.pause();
+              refSource.value.src = videoSRC.value;
+              video.value.load();
+              video.value.play();
+            };
             // refSource.value.setAttribute('src', videoSRC.value);
             refSource.value.src = videoSRC.value;
-          }, 40000);
+          }, 28800000); //8 hours
         }
       },
       { deep: true, immediate: true }
@@ -96,13 +104,17 @@ export default defineComponent({
       const videoCookie = useCookie("currentVideo");
       const timeCookie = useCookie("currentVideoTime");
     
-      if (!videoCookie || videoCookie.value == "" || !timeCookie || timeCookie.value == "") return;
+      if (!videoCookie || videoCookie.value === "" || !timeCookie || timeCookie.value === "") return;
     
       if (videoCookie.value !== videoID) {
-        videoCookie.value = "";
-        timeCookie.value = "";
-        return;
+        // Reset the time cookie to start the new video from the beginning
+        timeCookie.value = 0;
+        videoCookie.value = videoID;
+      } else {
+        // Set the current video time to the saved cookie value
+        event.target.currentTime = timeCookie.value;
       }
+    }
     
       event.target.currentTime = timeCookie.value;
     }
