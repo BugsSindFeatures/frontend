@@ -11,7 +11,6 @@
     ></iframe>
 
     <video
-      ref="video"
       v-else-if="activeLecture.type == 'mp4'"
       :poster="course.image"
       controls
@@ -20,8 +19,10 @@
       allowfullscreen
       controlsList="nodownload"
       oncontextmenu="return false;"
-      :key="`video-${videoSRC}`"
-    >
+      :key="`video-${activeLecture.id}`"
+      @timeupdate="onTimeUpdate(activeLecture.id, $event)"
+      @loadstart="onVideoLoad(activeLecture.id, $event)"
+    >    
       <track kind="captions" />
       <source ref="refSource" :src="videoSRC" type="video/mp4" />
       <p class="vjs-no-js">
@@ -54,7 +55,6 @@ export default defineComponent({
 
     let videoInterval: any;
     const refSource = ref<HTMLSourceElement | any>(null);
-    const video = ref<HTMLVideoElement | null>(null); 
 
     watch(
       () => props.activeLecture,
@@ -73,22 +73,41 @@ export default defineComponent({
           refSource.value.setAttribute("src", videoSRC.value);
           videoInterval = setInterval(async () => {
             await getLectureVideoSRC(courseID, newValue);
-            if (video.value) {
-              video.value.pause();
-              refSource.value.src = videoSRC.value;
-              video.value.load();
-              video.value.play();
-            };
             // refSource.value.setAttribute('src', videoSRC.value);
             refSource.value.src = videoSRC.value;
-          },  28800000); //8 hours
+          }, 40000);
         }
       },
       { deep: true, immediate: true }
     );
 
 
-    return { videoSRC, refSource, video };
+    function onTimeUpdate(videoID: string, event: any) {
+      const videoCookie = useCookie("currentVideo");
+      const timeCookie = useCookie("currentVideoTime");
+    
+      const currentVideoTime = event.target.currentTime;
+      timeCookie.value = currentVideoTime;
+    
+      if (currentVideoTime > 0) videoCookie.value = videoID;
+    }
+    
+    function onVideoLoad(videoID: string, event: any) {
+      const videoCookie = useCookie("currentVideo");
+      const timeCookie = useCookie("currentVideoTime");
+    
+      if (!videoCookie || videoCookie.value == "" || !timeCookie || timeCookie.value == "") return;
+    
+      if (videoCookie.value !== videoID) {
+        videoCookie.value = "";
+        timeCookie.value = "";
+        return;
+      }
+    
+      event.target.currentTime = timeCookie.value;
+    }
+    
+    return { videoSRC, refSource, onTimeUpdate, onVideoLoad };
   },
 });
 </script>
