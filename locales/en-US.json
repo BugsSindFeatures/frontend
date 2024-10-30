@@ -511,8 +511,9 @@
     "ExcitingUpdates": "Exciting news and updates",
     "NoMoreExcitingUpdates": "No more exciting news and updates",
     "SolvedFiveQuests": "Congratulations! You solved 5 Quests and recieved 5 MC.",
-    "SolveFiveQuests": "Solve 5 Quests to earn 5 MC.",
-    "SeeYouTomorrow": "See you tomorrow!"
+    "SolveFiveQuests": "Solve 5 Quests to earn 5 MorphCoin.",
+    "SeeYouTomorrow": "See you tomorrow!",
+    "Watch":"Watch"
   },
   "AltAttributes": {
     "BootstrapAcademyLogo": "Bootstrap Academy logo",
