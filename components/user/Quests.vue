@@ -5,7 +5,7 @@
       style="width: fit-content; position: absolute; left: 85%"
       class="flex items-center p-2 bg-warning-light text-warning rounded-md md:rounded-lg"
     >
-      <p>+ 5</p>
+      <p class="boxText">+5</p>
       <img
         src="/images/coin.png"
         :alt="t('AltAttributes.Morphcoin')"
@@ -15,10 +15,10 @@
 
     <!-- title -->
     <SectionTitle sub :heading="header.heading" :body="header.body" class="!m-0" />
-    <p v-if="lecturesDone < 5">
+    <p v-if="QuestsDone < 5">
       {{ t("Body.SolveFiveQuests") }}
     </p>
-    <p v-else-if="lecturesDone === 5">
+    <p v-else-if="QuestsDone === 5">
       {{ t("Body.SolvedFiveQuests") }}
     </p>
 
@@ -27,31 +27,32 @@
       <div
         class="bar progress-bar h-1 w-full rounded items-center"
         :key="progressbar_progress"
-        :style="{ width: `${progressbar_progress}%` }"
+        :style="{
+          width: `${progressbar_progress}%`,
+          backgroundColor: progressbar_color,
+        }"
       />
     </div>
 
     <!-- quests -->
     <div class="quests">
       <div class="videoQuestWrapper" v-if="videoquest">
-        <ul>
-          <!-- Videoquest -->
-          <div class="flexbox VideoOfVideoquest">
-            <!-- <NuxtLink
-              :key="i"
-              v-for="(course, i) of courses"
-              class="flex-shrink-0 snap-center cursor-pointer"
-              @click="watchUnseenLecture(course)"
-            >
-              <CourseCardSm :data="course" />
-            </NuxtLink> -->
-          </div>
-          <li :class="'flexbox videoquest quest' + solvedQuests[0]">
+        <!-- Videoquest -->
+        <div class="flexbox videoquest">
+          <IconText
+            v-if="solvedQuests[0] === false"
+            class="icon mb-2 truncate"
+            :icon="VideoIcon.icon"
+          >
             {{ t("Body.Watch") }} {{ videotitel }}!
-          </li>
-        </ul>
+          </IconText>
+          <IconText v-else class="greentext icon mb-2 truncate" :icon="VideoIcon.icon">
+            {{ t("Body.AlreadyWatched") }} {{ videotitel }}
+          </IconText>
+        </div>
       </div>
       <hr />
+      <p v-if="QuestsDone === 5">{{ t("Body.SeeYouTomorrow") }}</p>
 
       <!-- Taskquests -->
       <ul class="taskquests">
@@ -65,8 +66,6 @@
         </li>
       </ul>
     </div>
-
-    <p v-if="lecturesDone === 5">{{ t("Body.SeeYouTomorrow") }}</p>
   </section>
 </template>
 
@@ -74,15 +73,23 @@
 import { defineComponent, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Course, GetUnseenLectureResponse, Section } from "~/types/courseTypes";
+import { PlayIcon } from "@heroicons/vue/24/outline";
 
 export default defineComponent({
   setup() {
+    console.log("help");
     const loading = ref(true);
     const { t } = useI18n();
     const router = useRouter();
     const header = reactive({
       heading: "Headings.DailyQuests",
       body: "",
+    });
+    const VideoIcon = computed(() => {
+      return {
+        icon: PlayIcon,
+        text: "",
+      };
     });
 
     const myCourses = useMyCourses();
@@ -97,17 +104,23 @@ export default defineComponent({
       "What's special about <video>?",
       "What's special about <img>?",
     ];
-    var lecturesDone = 3;
-    var progressbar_progress = 0;
+    var progressbar_progress;
     var videoquest = true;
-    var solvedQuests = ["solved", "notsolved", "notsolved", "solved", "solved"];
+    var progressbar_color = "#3f51b5";
+    var solvedQuests = [true, true, true, true, true];
+    const QuestsDone = computed((): number => {
+      return solvedQuests.filter((quest) => quest === true).length;
+    });
     var videotitel = "Hacking mit Python";
 
-    if (lecturesDone === 0) {
+    if (QuestsDone.value === 0) {
       progressbar_progress = 1;
     }
-    if (lecturesDone > 0) {
-      progressbar_progress = lecturesDone * 20;
+    if (QuestsDone.value > 0) {
+      progressbar_progress = QuestsDone.value * 20;
+    }
+    if (QuestsDone.value === 5) {
+      progressbar_color = "rgb(255, 251, 0)";
     }
 
     onMounted(async () => {
@@ -137,7 +150,7 @@ export default defineComponent({
     return {
       progressbar_progress,
       header,
-      lecturesDone,
+      QuestsDone,
       t,
       taskquests,
       videoquest,
@@ -146,10 +159,11 @@ export default defineComponent({
       watchUnseenLecture,
       loading,
       courses,
+      VideoIcon,
+      progressbar_color,
     };
   },
-  //watch()
-  //TODO: change backgroundcolor of progressbar to gold if lecturesDone = 5 using watch!
+  //TODO: change progressbar_color to red if progessbar_progress = 5 using watch!
 });
 </script>
 
@@ -159,24 +173,18 @@ export default defineComponent({
 }
 .bar {
   height: 10px;
-  background-color: #3f51b5;
   transition: width 2s ease;
 }
-.barback {
-  height: 10px;
-  background-color: #3f51b5;
-  transition: width 2s ease;
-}
-.questsolved {
+.questtrue {
   color: rgb(47, 225, 86);
 }
-.questnotsolved::marker {
+.questfalse::marker {
   color: rgb(60, 184, 159);
-  content: "○ - ";
+  content: "- ";
 }
-.questsolved::marker {
+.questtrue::marker {
   color: rgb(47, 225, 86);
-  content: "● - ";
+  content: "- ";
 }
 hr {
   color: #3f51b5;
@@ -185,19 +193,17 @@ hr {
   margin-top: 1%;
 }
 .videoquest {
-  padding-top: 1%;
+  padding-top: 2%;
   padding-bottom: 1%;
   list-style: inside;
 }
 .taskquest {
   list-style: inside;
 }
-.VideoOfVideoquest {
-  border: 2px solid #3f51b5;
+.greentext {
+  background-color: rgba(47, 225, 86, 0.25);
 }
-.videoQuestWrapper {
-  display: flex;
-  flex-wrap: nowrap;
-  border: 2px solid #3f51b5;
+.boxText {
+  margin-right: 10px;
 }
 </style>

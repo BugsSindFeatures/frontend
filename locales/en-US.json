@@ -513,7 +513,8 @@
     "SolvedFiveQuests": "Congratulations! You solved 5 Quests and recieved 5 MC.",
     "SolveFiveQuests": "Solve 5 Quests to earn 5 MorphCoin.",
     "SeeYouTomorrow": "See you tomorrow!",
-    "Watch":"Watch"
+    "Watch":"Watch",
+    "AlreadyWatched":"You have already watched "
   },
   "AltAttributes": {
     "BootstrapAcademyLogo": "Bootstrap Academy logo",
