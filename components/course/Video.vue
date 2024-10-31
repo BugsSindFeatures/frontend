@@ -97,7 +97,7 @@ export default defineComponent({
       const currentVideoTime = event.target.currentTime;
       timeCookie.value = currentVideoTime;
     
-      if (currentVideoTime > 0) videoCookie.value = videoID;
+      if (currentVideoTime < 1) videoCookie.value = videoID;
     }
     
     function onVideoLoad(videoID: string, event: any) {
