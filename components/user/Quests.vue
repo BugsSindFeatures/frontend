@@ -18,7 +18,7 @@
     <p v-if="QuestsDone < 5">
       {{ t("Body.SolveFiveQuests") }}
     </p>
-    <p v-else-if="QuestsDone === 5">
+    <p style="font-size: smaller" v-else-if="QuestsDone === 5">
       {{ t("Body.SolvedFiveQuests") }}
     </p>
 
@@ -35,7 +35,7 @@
     </div>
 
     <!-- quests -->
-    <div class="quests">
+    <div v-if="QuestsDone != 5" class="quests">
       <div class="videoQuestWrapper" v-if="videoquest">
         <!-- Videoquest -->
         <div class="flexbox videoquest">
@@ -52,7 +52,6 @@
         </div>
       </div>
       <hr />
-      <p v-if="QuestsDone === 5">{{ t("Body.SeeYouTomorrow") }}</p>
 
       <!-- Taskquests -->
       <ul class="taskquests">
@@ -107,7 +106,7 @@ export default defineComponent({
     var progressbar_progress;
     var videoquest = true;
     var progressbar_color = "#3f51b5";
-    var solvedQuests = [true, true, true, true, true];
+    var solvedQuests = [true, false, true, true, true];
     const QuestsDone = computed((): number => {
       return solvedQuests.filter((quest) => quest === true).length;
     });
