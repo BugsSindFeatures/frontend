@@ -108,15 +108,12 @@ export default defineComponent({
     
       if (videoCookie.value !== videoID) {
         // Reset the time cookie to start the new video from the beginning
-        timeCookie.value = 0;
+        timeCookie.value = "";
         videoCookie.value = videoID;
       } else {
         // Set the current video time to the saved cookie value
         event.target.currentTime = timeCookie.value;
       }
-    }
-    
-      event.target.currentTime = timeCookie.value;
     }
     
     return { videoSRC, refSource, onTimeUpdate, onVideoLoad };
