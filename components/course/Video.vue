@@ -20,7 +20,7 @@
       allowfullscreen
       controlsList="nodownload"
       oncontextmenu="return false;"
-      :key="`video-${activeLecture.id}`"
+      :key="`video-${videoSRC}`"
       @timeupdate="onTimeUpdate(activeLecture.id, $event)"
       @loadstart="onVideoLoad(activeLecture.id, $event)"
     >    
