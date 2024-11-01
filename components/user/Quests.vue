@@ -2,8 +2,8 @@
   <section>
     <!-- +5 MC box -->
     <article
-      style="width: fit-content; position: absolute; left: 85%"
-      class="flex items-center p-2 bg-warning-light text-warning rounded-md md:rounded-lg"
+      style="width: fit-content; position: relative; left: 90%; top: 30%"
+      :class="`flex items-center p-2 bg-warning-light text-warning rounded-md md:rounded-lg ${grayOutClass}`"
     >
       <p class="boxText">+5</p>
       <img
@@ -32,6 +32,8 @@
           backgroundColor: progressbar_color,
         }"
       />
+      <!-- Progress pointer box with dynamic position -->
+      <div v-if="QuestsDone < 5" class="progress-pointer">{{ QuestsDone }} / 5</div>
     </div>
 
     <!-- quests -->
@@ -76,7 +78,6 @@ import { PlayIcon } from "@heroicons/vue/24/outline";
 
 export default defineComponent({
   setup() {
-    console.log("help");
     const loading = ref(true);
     const { t } = useI18n();
     const router = useRouter();
@@ -106,11 +107,12 @@ export default defineComponent({
     var progressbar_progress;
     var videoquest = true;
     var progressbar_color = "#3f51b5";
-    var solvedQuests = [true, false, true, true, true];
+    var solvedQuests = [false, false, false, false, false];
     const QuestsDone = computed((): number => {
       return solvedQuests.filter((quest) => quest === true).length;
     });
     var videotitel = "Hacking mit Python";
+    var grayOutClass = "";
 
     if (QuestsDone.value === 0) {
       progressbar_progress = 1;
@@ -122,6 +124,9 @@ export default defineComponent({
       progressbar_color = "rgb(255, 251, 0)";
     }
 
+    if (QuestsDone.value < 5) {
+      var grayOutClass = "grayed-out";
+    }
     onMounted(async () => {
       await getMyCourses();
       loading.value = false;
@@ -160,15 +165,17 @@ export default defineComponent({
       courses,
       VideoIcon,
       progressbar_color,
+      grayOutClass,
     };
   },
-  //TODO: change progressbar_color to red if progessbar_progress = 5 using watch!
 });
 </script>
 
 <style scoped>
 .progress {
   display: flex;
+  align-items: center;
+  position: relative;
 }
 .bar {
   height: 10px;
@@ -204,5 +211,33 @@ hr {
 }
 .boxText {
   margin-right: 10px;
+}
+/* Box that points to current progress */
+.progress-pointer {
+  position: relative;
+  transform: translateX(-50%); /* Center the box */
+  background-color: #3f51b5;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  top: -2cqmax;
+  text-wrap: nowrap;
+}
+.progress-pointer::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #3f51b5; /* Match the background color */
+}
+.grayed-out {
+  opacity: 0.5; /* halbtransparent */
+  color: gray; /* grauer Text */
+  background-color: lightgray; /* optional, falls der Hintergrund auch grau sein soll */
 }
 </style>
