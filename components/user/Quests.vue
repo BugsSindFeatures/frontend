@@ -14,11 +14,16 @@
     </article>
 
     <!-- title -->
-    <SectionTitle sub :heading="header.heading" :body="header.body" class="!m-0" />
-    <p v-if="QuestsDone < 5">
+    <SectionTitle
+      sub
+      :heading="header.heading"
+      :body="header.body"
+      class="moveElement15Top !m-0"
+    />
+    <p class="moveElement15Top" v-if="QuestsDone < 5">
       {{ t("Body.SolveFiveQuests") }}
     </p>
-    <p style="font-size: smaller" v-else-if="QuestsDone === 5">
+    <p class="moveElement15Top" style="font-size: smaller" v-else-if="QuestsDone === 5">
       {{ t("Body.SolvedFiveQuests") }}
     </p>
 
@@ -74,7 +79,7 @@
 import { defineComponent, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import type { Course, GetUnseenLectureResponse, Section } from "~/types/courseTypes";
-import { PlayIcon } from "@heroicons/vue/24/outline";
+import { FaceFrownIcon, PlayIcon } from "@heroicons/vue/24/outline";
 
 export default defineComponent({
   setup() {
@@ -107,12 +112,12 @@ export default defineComponent({
     var progressbar_progress;
     var videoquest = true;
     var progressbar_color = "#3f51b5";
-    var solvedQuests = [false, false, false, false, false];
+    var solvedQuests = [true, true, true, true, true];
     const QuestsDone = computed((): number => {
       return solvedQuests.filter((quest) => quest === true).length;
     });
     var videotitel = "Hacking mit Python";
-    var grayOutClass = "";
+    var grayOutClass = "grayed-out";
 
     if (QuestsDone.value === 0) {
       progressbar_progress = 1;
@@ -125,7 +130,7 @@ export default defineComponent({
     }
 
     if (QuestsDone.value < 5) {
-      var grayOutClass = "grayed-out";
+      var grayOutClass = "";
     }
     onMounted(async () => {
       await getMyCourses();
@@ -190,7 +195,7 @@ export default defineComponent({
 }
 .questtrue::marker {
   color: rgb(47, 225, 86);
-  content: "- ";
+  content: "✔ ";
 }
 hr {
   color: #3f51b5;
@@ -239,5 +244,9 @@ hr {
   opacity: 0.5; /* halbtransparent */
   color: gray; /* grauer Text */
   background-color: lightgray; /* optional, falls der Hintergrund auch grau sein soll */
+}
+.moveElement15Top {
+  position: relative;
+  top: -15%;
 }
 </style>
